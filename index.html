@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZDorker | Advanced Search Engine Dorking Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6e44ff;
+            --primary-dark: #5a36d6;
+            --secondary: #00f0ff;
+            --dark: #0f0f1a;
+            --darker: #070710;
+            --light: #f0f2ff;
+            --accent: #ff4d7d;
+            --gray: #6c757d;
+            --success: #00e676;
+            
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-code: 'Ubuntu Mono', monospace;
+            
+            --gradient-primary: linear-gradient(135deg, var(--primary), #8a2be2);
+            --gradient-accent: linear-gradient(135deg, var(--accent), #ff6b6b);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary), #00b4d8);
+            
+            --glow-primary: 0 0 15px rgba(110, 68, 255, 0.5);
+            --glow-accent: 0 0 15px rgba(255, 77, 125, 0.5);
+            --glow-secondary: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        /* Cyberpunk Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+        
+        /* Header with animated background */
+        header {
+            background: var(--darker);
+            color: white;
+            padding: 4rem 0 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(110, 68, 255, 0.2);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        .particle {
+            position: absolute;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--glow-primary);
+        }
+        
+        .logo i {
+            font-size: 4rem;
+            color: var(--secondary);
+            filter: drop-shadow(var(--glow-secondary));
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cyber-badge {
+            display: inline-block;
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            box-shadow: var(--glow-secondary);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover::before {
+            background: var(--gradient-accent);
+        }
+        
+        .btn-primary {
+            color: white;
+            box-shadow: var(--glow-primary);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-accent);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            box-shadow: var(--glow-secondary);
+        }
+        
+        .btn i {
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            margin: 1rem auto;
+            border-radius: 2px;
+            box-shadow: var(--glow-primary);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-secondary);
+            border-radius: 3px;
+        }
+        
+        /* Neon Card Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background: rgba(15, 15, 26, 0.7);
+            border-radius: 15px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(110, 68, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-primary);
+            z-index: -1;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(110, 68, 255, 0.3);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 0.3;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        
+        .feature-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Cyber Terminal Style Code Blocks */
+        .code-block {
+            background: rgba(10, 10, 20, 0.8);
+            color: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: var(--font-code);
+            margin: 2rem 0;
+            border: 1px solid rgba(110, 68, 255, 0.2);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-family: var(--font-code);
+        }
+        
+        .code-language {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .copy-btn {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--secondary);
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+        }
+        
+        .code-block code {
+            display: block;
+            white-space: pre;
+            line-height: 1.6;
+        }
+        
+        /* Neon Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 3rem 0;
+            border-radius: 10px;
+            background: rgba(15, 15, 26, 0.7);
+            border: 1px solid rgba(110, 68, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(110, 68, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(110, 68, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        tr:hover {
+            background-color: rgba(110, 68, 255, 0.05);
+        }
+        
+        .status-icon {
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+        }
+        
+        .status-success {
+            color: var(--success);
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+        }
+        
+        /* Cyberpunk FAQ */
+        .faq-item {
+            background: rgba(15, 15, 26, 0.7);
+            border-radius: 10px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(110, 68, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: rgba(110, 68, 255, 0.4);
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--secondary);
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(110, 68, 255, 0.2);
+            margin-top: 1.5rem;
+        }
+        
+        /* Glowing Footer */
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 5rem 0 3rem;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid rgba(110, 68, 255, 0.2);
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gradient-primary);
+            box-shadow: var(--glow-primary);
+        }
+        
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .footer-tagline {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.8;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--secondary);
+            box-shadow: var(--glow-secondary);
+        }
+        
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .logo {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.4rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(110, 68, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(110, 68, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(110, 68, 255, 0);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="particles" id="particles"></div>
+        <div class="header-content">
+            <div class="cyber-badge">Beta v1.0</div>
+            <div class="logo">
+                <i class="fas fa-terminal"></i>
+                <span>EZDorker</span>
+            </div>
+            <p class="tagline">The ultimate search engine reconnaissance tool for ethical hackers and security researchers. Uncover hidden vulnerabilities with advanced dorking techniques.</p>
+            <div class="cta-buttons">
+                <a href="#installation" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Get Started
+                </a>
+                <a href="https://github.com/yourusername/ezdorker" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="overview">
+        <div class="container">
+            <h2 class="section-title">Cyber Reconnaissance</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <h4>Multi-Engine Support</h4>
+                    <p>Query across Google, Bing, DuckDuckGo, Yahoo, Baidu, and Yandex simultaneously for comprehensive results with automated request rotation.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-folder-tree"></i>
+                    </div>
+                    <h4>Smart Dork Categories</h4>
+                    <p>Pre-built dork categories for filetypes, login pages, config files, vulnerabilities, and subdomains with customizable templates.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-export"></i>
+                    </div>
+                    <h4>Advanced Output</h4>
+                    <p>Export results in JSON, CSV, or plain text formats with detailed metadata for easy integration with other security tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo">
+        <div class="container">
+            <h2 class="section-title">Terminal Demo</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Terminal</span>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <code>
+$ python ezdorker.py example.com -e google bing -c filetype login -v -o results.json
+
+[+] EZDorker v1.0 - Cyber Reconnaissance Tool
+[+] Initializing with 4 threads...
+[+] Target: example.com
+[+] Engines: google, bing
+[+] Dork categories: filetype, login
+
+[+] Generated 12 dork queries
+[+] Starting reconnaissance...
+
+[1/12] Executing: site:example.com filetype:pdf
+  [+] GOOGLE: Found 3 results (0.8s)
+  [+] BING: Found 2 results (1.1s)
+
+[2/12] Executing: site:example.com inurl:login
+  [+] GOOGLE: Found admin panel at /admin/login (0.6s)
+  [+] BING: Found 1 result (0.9s)
+
+[+] Scan completed in 28.4 seconds
+[+] Results saved to: results.json
+[+] 42 unique endpoints discovered
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <section id="installation">
+        <div class="container">
+            <h2 class="section-title">Installation</h2>
+            
+            <h3>Requirements</h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">System</span>
+                </div>
+                <code>
+• Python 3.6+ (recommended 3.9+)
+• pip package manager
+• 4GB RAM minimum
+• Internet connection
+                </code>
+            </div>
+            
+            <h3>Quick Install</h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Bash</span>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <code>
+# Clone the repository
+git clone https://github.com/yourusername/ezdorker.git
+cd ezdorker
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Or install manually
+pip install requests beautifulsoup4 colorama
+                </code>
+            </div>
+            
+            <h3>Docker Installation</h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Bash</span>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <code>
+# Pull the Docker image
+docker pull yourusername/ezdorker:latest
+
+# Run with basic parameters
+docker run -it --rm yourusername/ezdorker example.com
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage">
+        <div class="container">
+            <h2 class="section-title">Usage</h2>
+            
+            <h3>Basic Command</h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Bash</span>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <code>python ezdorker.py example.com</code>
+            </div>
+            
+            <h3>Advanced Options</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>-o OUTPUT</code></td>
+                            <td>Save results to file (JSON/CSV/TXT)</td>
+                            <td><code>-o results.json</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-e ENGINES</code></td>
+                            <td>Search engines (space-separated)</td>
+                            <td><code>-e google bing yandex</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-c CATEGORIES</code></td>
+                            <td>Dork categories to use</td>
+                            <td><code>-c filetype login</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-t THREADS</code></td>
+                            <td>Number of threads (default: 4)</td>
+                            <td><code>-t 8</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-d DELAY</code></td>
+                            <td>Delay between requests (seconds)</td>
+                            <td><code>-d 3</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-b</code></td>
+                            <td>Open dorks in browser</td>
+                            <td><code>-b</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-v</code></td>
+                            <td>Verbose output mode</td>
+                            <td><code>-v</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>Full Example</h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-language">Bash</span>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <code>
+# Comprehensive scan with all options
+python ezdorker.py example.com \
+  -o results.csv \
+  -e google bing duckduckgo \
+  -c filetype login config vulnerabilities \
+  -t 6 \
+  -d 2 \
+  -v \
+  -b
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <section id="engines">
+        <div class="container">
+            <h2 class="section-title">Supported Engines</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Engine</th>
+                            <th>Status</th>
+                            <th>Features</th>
+                            <th>Rate Limit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Google</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Full Support</td>
+                            <td>Advanced operators, pagination</td>
+                            <td>Strict</td>
+                        </tr>
+                        <tr>
+                            <td>Bing</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Full Support</td>
+                            <td>API-like results, fast</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td>DuckDuckGo</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Full Support</td>
+                            <td>Privacy focused, no JS</td>
+                            <td>Lenient</td>
+                        </tr>
+                        <tr>
+                            <td>Yahoo</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Full Support</td>
+                            <td>Bing-powered, alternative</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td>Baidu</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Basic Support</td>
+                            <td>Chinese results</td>
+                            <td>Strict</td>
+                        </tr>
+                        <tr>
+                            <td>Yandex</td>
+                            <td><i class="fas fa-check-circle status-icon status-success"></i> Basic Support</td>
+                            <td>Russian results</td>
+                            <td>Moderate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq">
+        <div class="container">
+            <h2 class="section-title">FAQ</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I avoid getting blocked by search engines?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>Use the <code>-d</code> flag to increase delay between requests (recommended 3-5 seconds)</li>
+                        <li>Rotate between different search engines using <code>-e google bing duckduckgo</code></li>
+                        <li>Limit the number of threads with <code>-t 2</code> for more stealth</li>
+                        <li>Consider using residential proxies if doing extensive scanning</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's the best output format for analysis?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For most use cases, JSON (<code>-o results.json</code>) is recommended because:</p>
+                    <ul>
+                        <li>Preserves all metadata (engine source, dork used, timestamps)</li>
+                        <li>Easily parsable by other tools (jq, Python scripts, etc.)</li>
+                        <li>Supports nested structures for complex data</li>
+                    </ul>
+                    <p>For quick review, CSV is good for spreadsheet analysis, and TXT is most human-readable.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I add custom dork patterns?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Edit the <code>DORKS</code> dictionary in the script to add your own patterns:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Python</span>
+                        </div>
+                        <code>
+DORKS = {
+    "custom": [
+        "site:{target} ext:php intext:'admin'",
+        "site:{target} intitle:'index of' password",
+        # Add your custom dorks here
+    ],
+    # ... existing categories
+}
+                        </code>
+                    </div>
+                    <p>Then use with <code>-c custom</code> parameter.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">EZDorker</div>
+            <p class="footer-tagline">The ultimate search engine reconnaissance tool for ethical security research</p>
+            
+            <div class="footer-links">
+                <a href="#overview">Features</a>
+                <a href="#installation">Install</a>
+                <a href="#usage">Usage</a>
+                <a href="#faq">FAQ</a>
+                <a href="https://github.com/yourusername/ezdorker">GitHub</a>
+                <a href="#">Docs</a>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p class="copyright">© 2023 EZDorker | Released under MIT License | Not affiliated with any search engines</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random color
+                const colors = ['#6e44ff', '#00f0ff', '#ff4d7d'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Copy code blocks
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const codeBlock = btn.parentElement.parentElement.querySelector('code');
+                const text = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.textContent = 'Copy';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Initialize on load
+        window.addEventListener('load', () => {
+            createParticles();
+        });
+    </script>
+</body>
+</html>
