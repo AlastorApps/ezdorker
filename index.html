@@ -45,6 +45,47 @@
             line-height: 1.7;
             overflow-x: hidden;
         }
+
+        .installation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .installation-card {
+            background: rgba(15, 15, 26, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(110, 68, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .installation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(110, 68, 255, 0.3);
+        }
+        
+        .installation-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--secondary);
+        }
+        
+        .installation-card h3 i {
+            font-size: 1.6rem;
+        }
+        
+        @media (max-width: 768px) {
+            .installation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         
         /* Cyberpunk Scrollbar */
         ::-webkit-scrollbar {
@@ -784,26 +825,30 @@ $ python ezdorker.py example.com -e google bing -c filetype login -v -o results.
         <div class="container">
             <h2 class="section-title">Installation</h2>
             
-            <h3>Requirements</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-language">System</span>
-                </div>
-                <code>
+            <div class="installation-grid">
+                <div class="installation-card">
+                    <h3><i class="fas fa-list-check"></i> Requirements</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">System</span>
+                        </div>
+                        <code>
 • Python 3.6+ (recommended 3.9+)
 • pip package manager
 • 4GB RAM minimum
 • Internet connection
-                </code>
-            </div>
-            
-            <h3>Quick Install</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-language">Bash</span>
-                    <button class="copy-btn">Copy</button>
+                        </code>
+                    </div>
                 </div>
-                <code>
+                
+                <div class="installation-card">
+                    <h3><i class="fas fa-download"></i> Quick Install</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <code>
 # Clone the repository
 git clone https://github.com/alastorapps/ezdorker.git
 cd ezdorker
@@ -813,22 +858,26 @@ pip install -r requirements.txt
 
 # Or install manually
 pip install requests beautifulsoup4 colorama
-                </code>
-            </div>
-            
-            <h3>Docker Installation</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-language">Bash</span>
-                    <button class="copy-btn">Copy</button>
+                        </code>
+                    </div>
                 </div>
-                <code>
+                
+                <div class="installation-card">
+                    <h3><i class="fab fa-docker"></i> Docker Install</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">Bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <code>
 # Pull the Docker image
 docker pull alastorapps/ezdorker:latest
 
 # Run with basic parameters
 docker run -it --rm alastorapps/ezdorker example.com
-                </code>
+                        </code>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1124,3 +1173,4 @@ DORKS = {
 </body>
 
 </html>
+
