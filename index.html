@@ -314,6 +314,7 @@
             color: var(--light);
             position: relative;
             display: inline-block;
+            width: 100%;
         }
         
         h3::after {
@@ -886,13 +887,15 @@ docker run -it --rm alastorapps/ezdorker-tool example.com
         <div class="container">
             <h2 class="section-title">Usage</h2>
             
-            <h3>Basic Command</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-language">Bash</span>
-                    <button class="copy-btn">Copy</button>
+            <div style="margin-bottom: 2rem;">
+                <h3>Basic Command</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">Bash</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <code>python ezdorker.py example.com</code>
                 </div>
-                <code>python ezdorker.py example.com</code>
             </div>
             
             <h3>Advanced Options</h3>
@@ -1171,8 +1174,4 @@ DORKS = {
         });
     </script>
 </body>
-
 </html>
-
-
-
